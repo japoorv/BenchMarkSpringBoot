@@ -1,0 +1,44 @@
+integrations:
+  prometheus_remote_write:
+    - basic_auth:
+        password: eyJrIjoiZjhhNGQ1YTY0MTdiMjhkNDc5NzVkMmU1ZGQ5ZWQ4ODU2N2EwZmNlOSIsIm4iOiJzdGFjay00MDE4OTctZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjY4MDE0M30=
+        username: 504498
+      url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
+logs:
+  configs:
+    - clients:
+        - basic_auth:
+            password: eyJrIjoiZjhhNGQ1YTY0MTdiMjhkNDc5NzVkMmU1ZGQ5ZWQ4ODU2N2EwZmNlOSIsIm4iOiJzdGFjay00MDE4OTctZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjY4MDE0M30=
+            username: 251219
+          url: https://logs-prod3.grafana.net/loki/api/v1/push
+      name: integrations
+      positions:
+        filename: /tmp/positions.yaml
+      scrape_configs:
+        - job_name: varlogs
+          static_configs:
+            - targets: [localhost]
+              labels:
+                job: varlogs
+                __path__: /var/logs/app-logs
+      target_config:
+        sync_period: 10s
+metrics:
+  configs:
+    - name: integrations
+      remote_write:
+        - basic_auth:
+            password: eyJrIjoiZjhhNGQ1YTY0MTdiMjhkNDc5NzVkMmU1ZGQ5ZWQ4ODU2N2EwZmNlOSIsIm4iOiJzdGFjay00MDE4OTctZWFzeXN0YXJ0LXByb20tcHVibGlzaGVyIiwiaWQiOjY4MDE0M30=
+            username: 504498
+          url: https://prometheus-prod-10-prod-us-central-0.grafana.net/api/prom/push
+      scrape_configs:
+        - job_name: integrations/spring-boot
+          metrics_path: /actuator/prometheus
+          static_configs:
+            - targets:
+                - localhost:8081
+  global:
+    scrape_interval: 60s
+  wal_directory: /tmp/grafana-agent-wal
+server:
+  http_listen_port: 12345
